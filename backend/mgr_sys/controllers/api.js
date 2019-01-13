@@ -11,7 +11,7 @@ module.exports = {
             resp.code = -1;
             resp.msg = 'param error';
             ctx.rest(resp);
-            return
+            return;
         }
         let usersFound = await model.user.findAll({
             where: { name: userName }
@@ -27,13 +27,12 @@ module.exports = {
             resp.code = -1;
             resp.msg = 'passwd mismatch';
             ctx.rest(resp);
-            return
+            return;
         }
         ctx.rest({
             code: 0,
             msg: 'ok'
         });
-        console.log('lol', ctx.session)
         ctx.session.userName = userName;
     },
     //register
@@ -45,7 +44,7 @@ module.exports = {
             resp.code = -1;
             resp.msg = 'param error';
             ctx.rest(resp);
-            return
+            return;
         }
         let usersFound = await model.user.findAll({
             where: { name: userName }
@@ -54,7 +53,7 @@ module.exports = {
             resp.code = -1;
             resp.msg = `userName has been registered`;
             ctx.rest(resp);
-            return
+            return;
         }
         let user = await model.user.create({
             name: userName,
@@ -64,6 +63,29 @@ module.exports = {
             code: 0,
             msg: 'ok'
         });
+    },
+    //get house info
+    'GET /api/house-info': async (ctx, next) => {
+        resp = {};
+        let userName = ctx.session.userName || '';
+        if (userName === '') {
+            resp.code = -1;
+            resp.msg = 'please login first';
+            ctx.rest(resp);
+            return;
+        }
+        let allHouseInfo = model.user_house_info.findAll({
+            where: { name: userName }
+        });
+        ctx.rest({
+            code: 0,
+            msg: 'ok',
+            body: allHouseInfo
+        })
+        return;
+    },
+    //post house info
+    'POST /api/house-info': async (ctx, next) => {
 
     }
 };

@@ -7,7 +7,7 @@ const config = require('./config');
 console.log('init sequelize...');
 
 function generateId() {
-    return uuid.v4();
+    return uuid.v1();
 }
 
 var sequelize = new Sequelize(config.database, config.username, config.password, {
