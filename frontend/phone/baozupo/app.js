@@ -7,20 +7,21 @@ const bodyParser = require('koa-bodyparser')
 const errorHandle = require('./server/middlewares/errorHandle')
 const sendHandle = require('./server/middlewares/sendHandle')
 
-const user = require('./server/routes/user')
-const secret = 'mysecret'
+const api = require('./server/routes/api')
+const jwtConfig = require('./server/config/jwtConfig')
+let jwtSecret = jwtConfig.jwtSecret
 const app = new Koa()
 app.use(koaStatic('./dist'))
 app.use(bodyParser())
 app.use(sendHandle())
 app.use(errorHandle)
 app.use(koajwt({
-  secret
+  secret: jwtSecret
 }).unless({
   path: [/\/api\/register/, /\/api\/login/]
 }))
 
-router.use('/api', user.routes())
+router.use('/api', api.routes())
 app.use(router.routes())
 
 app.listen('3001', () => {

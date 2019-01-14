@@ -17,18 +17,13 @@
        :readonly='!toggle'
        :disableClear = '!toggle'
         ></mt-field>
-        <router-link class="tip" to="/register">现在去注册</router-link>
     </section>
     <mt-button
-     plain
+     type="primary"
      size="large"
      @click="login"
-     v-if='toggle'>登录</mt-button>
-    <mt-button
-     plain
-     size="large"
-     @click="logout"
-     v-else>退出登录</mt-button>
+     >登录</mt-button>
+    <router-link class="tip" to="/register" style="text-decoration: none">现在去注册</router-link>
 
   </div>
 </template>
@@ -37,8 +32,8 @@
 export default {
   data() {
     return {
-      userName: "test",
-      password: "test",
+      userName: "lyh",
+      password: "lyh",
       toggle: true //!this.$store.state.login.token
     };
   },
@@ -60,7 +55,7 @@ export default {
           if (res.code === "000001") {
             localStorage.setItem("token", res.data);
             localStorage.setItem("token_exp", new Date().getTime());
-            this.$router.push("/");
+            this.$router.push("/home/record");
           } else {
             this.$toast({
               message: `error:  ${res.msg}`,
@@ -71,15 +66,13 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    },
-    //退出登录按钮
-    logout() {}
+    }
   }
 };
 </script>
 
 <style scoped>
-.login > section .tip {
+.login .tip {
   display: block;
   padding: 60px;
   color: rgb(224, 145, 71);

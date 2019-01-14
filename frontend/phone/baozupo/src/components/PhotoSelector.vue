@@ -13,7 +13,7 @@
           style="display: none;"
         >
       </div>
-      <ul class="list-ul" v-show="!isPhoto">
+      <ul class="list-ul" v-show="!isPhoto" style="padding-left: 0">
         <li class="list-li" v-for="(iu, index) in imgUrls">
           <img :src="iu">
           <span class="list-img-close" @click="delImage(index)"></span>
@@ -34,6 +34,7 @@ export default {
   data: function() {
     return {
       imgUrls: [],
+      base64Imgs: [],
       isPhoto: true,
       canAdd: true
     };
@@ -60,6 +61,13 @@ export default {
       vm.$refs.cameraInput.click();
       return false;
     },
+    blobToDataURL(blob, callback) {
+      var a = new FileReader();
+      a.onload = function(e) {
+        callback(e.target.result);
+      };
+      a.readAsDataURL(blob);
+    },
     onFileChange: function(e) {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -69,11 +77,13 @@ export default {
       console.log("createImage");
       let vm = this;
       new Compressor(files[0], {
-        quality: 0.6,
+        quality: 0.1,
         success(result) {
-          console.log(result);
-          let url = URL.createObjectURL(result);
-          vm.imgUrls.push(url);
+          vm.blobToDataURL(result, res => {
+            vm.base64Imgs.push(res);
+            let url = URL.createObjectURL(result);
+            vm.imgUrls.push(url);
+          });
         },
         error(err) {
           console.log(err.message);
@@ -85,6 +95,7 @@ export default {
       MintUI.MessageBox.confirm("确定删除该图片?").then(
         action => {
           vm.imgUrls.splice(index, 1);
+          vm.base64Imgs.splice(index, 1);
         },
         reject => {}
       );
