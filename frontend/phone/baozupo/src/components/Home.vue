@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="">
-    <mt-header :title="selected">
+    <mt-header :title="selected" class="header">
     </mt-header>
     <router-view></router-view>
     <mt-tabbar v-model="selected">
@@ -37,4 +37,14 @@ export default {
 </script>
 
 <style scoped>
+.header {
+  background-color: pink;
+  font-size: 24px;
+  line-height: 26px;
+  color: #555;
+}
+.mint-tabbar > .mint-tab-item.is-selected {
+  color: black;
+  background-color: pink;
+}
 </style>

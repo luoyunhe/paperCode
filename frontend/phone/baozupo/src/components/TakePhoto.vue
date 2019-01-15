@@ -1,5 +1,6 @@
 <template>
   <div class="baozupo">
+    <div style="line-height: 60px; font-size: 25px;">录入水表、电表信息</div>
     <mt-field label="年份：" v-model="curYear" disabled>
       <mt-button
         type="primary"
@@ -16,13 +17,21 @@
         style="margin-left: 30px"
       >选择月份</mt-button>
     </mt-field>
-    <mt-field label="楼号：" v-model="houseName" disabled>
+    <mt-field label="楼名：" v-model="houseName" disabled>
       <mt-button
         type="primary"
         size="small"
         @click="HNPickerVis = true"
         style="margin-left: 30px"
-      >选择楼号</mt-button>
+      >选择楼名</mt-button>
+    </mt-field>
+    <mt-field label="楼层：" v-model="layerNum" disabled>
+      <mt-button
+        type="primary"
+        size="small"
+        @click="LNPickerVis = true"
+        style="margin-left: 30px"
+      >选择楼层</mt-button>
     </mt-field>
     <mt-field label="房号：" v-model="roomNum" disabled>
       <mt-button
@@ -44,6 +53,9 @@
     <mt-popup v-model="HNPickerVis" position="bottom" style="width: 100%">
       <mt-picker :slots="HNSlots" @change="onHNChange"></mt-picker>
     </mt-popup>
+    <mt-popup v-model="LNPickerVis" position="bottom" style="width: 100%">
+      <mt-picker :slots="LNSlots" @change="onLNChange"></mt-picker>
+    </mt-popup>
     <mt-popup v-model="RNPickerVis" position="bottom" style="width: 100%">
       <mt-picker :slots="RNSlots" @change="onRNChange"></mt-picker>
     </mt-popup>
@@ -57,6 +69,16 @@ export default {
   name: "TakePhoto",
   components: {
     "photo-selector": PhotoSelector
+  },
+  beforeMount: function() {
+    this.$axios
+      .get("/api/get-user-info")
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   mounted: function() {
     let curDate = new Date();
@@ -72,7 +94,9 @@ export default {
     return {
       houseName: "真如苑",
       HNPickerVis: false,
-      roomNum: 101,
+      layerNum: "1",
+      roomNum: "01",
+      LNPickerVis: false,
       RNPickerVis: false,
       YPickerVis: false,
       MPickerVis: false,
@@ -106,23 +130,14 @@ export default {
           values: ["真如苑", "荔枝苑", "明湖苑"]
         }
       ],
+      LNSlots: [
+        {
+          values: ["1", "2", "3"]
+        }
+      ],
       RNSlots: [
         {
-          flex: 1,
-          values: ["1", "2", "3"],
-          className: "slot1",
-          textAlign: "right"
-        },
-        {
-          divider: true,
-          content: "--",
-          className: "slot2"
-        },
-        {
-          flex: 1,
-          values: ["01", "02", "03", "04", "05", "06"],
-          className: "slot3",
-          textAlign: "left"
+          values: ["01", "02", "03", "04", "05", "06"]
         }
       ]
     };
@@ -137,10 +152,11 @@ export default {
         });
         return;
       }
-      console.log(imgs[0]);
+      //console.log(imgs[0]);
       this.$axios
         .post("/api/upload", {
           houseName: this.houseName,
+          layerNum: this.layerNum,
           roomNum: this.roomNum,
           year: this.curYear,
           month: this.curMon,
@@ -148,8 +164,7 @@ export default {
         })
         .then(res => {
           if (res.code === "000001") {
-            // this.$refs.photoSelector.imgs = [];
-            // this.$refs.photoSelector.imgUrls = [];
+            console.log(res);
             this.$toast({
               message: "上传成功",
               duration: 1500
@@ -168,7 +183,10 @@ export default {
       this.houseName = values[0];
     },
     onRNChange(picker, values) {
-      this.roomNum = values[0] + values[1];
+      this.roomNum = values[0];
+    },
+    onLNChange(picker, values) {
+      this.layerNum = values[0];
     },
     onYChange(picker, values) {
       this.curYear = values[0];

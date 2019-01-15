@@ -1,6 +1,7 @@
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
-const userModel = require('../models/userModel.js')
+const userModel = require('../models/userModel')
+const houseModel = require('../models/houseModel')
 const jwtSecret = require('../config/jwtConfig').jwtSecret
 class UserController {
   // 用户注册
@@ -42,11 +43,39 @@ class UserController {
     }
   }
   static async getUserInfo (ctx) {
-
+    let user = ctx.state.user
+    const checkUser = await userModel.findAll({
+      where: { id: user._id }
+    })
+    const checkHouse = await houseModel.findAll({
+      where: { userId: user._id }
+    })
+    return ctx.send({ userInfo: checkUser, houseInfo: checkHouse }, '请求成功')
   }
   static async addHouse (ctx) {
     let body = ctx.request.body
-    return ctx.send(null, '登录成功')
+    let user = ctx.state.user
+    console.log(user)
+    console.log(body)
+    const checkHouse = await houseModel.findAll({
+      where: { userId: user._id }
+    })
+    for (let i = 0; i < checkHouse.length; i++) {
+      if (body.houseName === checkHouse[i].name) {
+        return ctx.sendError('000002', '房屋名重名')
+      }
+    }
+    const result = await houseModel.create({
+      name: body.houseName,
+      layerSize: parseInt(body.layerSize),
+      roomSize: parseInt(body.roomSize),
+      userId: user._id
+    }).catch((err) => {
+      console.log(err)
+      return ctx.sendError('000002', '未处理错误')
+    })
+    console.log(result)
+    return ctx.send(null, '添加成功')
   }
 }
 
