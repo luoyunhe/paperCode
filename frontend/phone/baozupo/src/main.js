@@ -10,10 +10,19 @@ import 'mint-ui/lib/style.css'
 Vue.use(MintUI)
 Vue.use(Vuex)
 const state = {
-  userInfo: null
+  userInfo: null,
+  houseInfo: null
 }
 const store = new Vuex.Store({
-  state
+  state,
+  mutations: {
+    updateInfo (state, info) {
+      state.userInfo = info.userInfo
+      state.houseInfo = info.houseInfo
+      console.log(info.houseInfo)
+      console.log('update info')
+    }
+  }
 })
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios

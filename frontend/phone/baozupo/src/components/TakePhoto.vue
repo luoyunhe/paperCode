@@ -65,6 +65,7 @@
 <script>
 import Vue from "vue";
 import PhotoSelector from "@/components/PhotoSelector";
+import { mapState } from "vuex";
 export default {
   name: "TakePhoto",
   components: {
@@ -74,12 +75,61 @@ export default {
     this.$axios
       .get("/api/get-user-info")
       .then(res => {
-        console.log(res);
+        this.$store.commit("updateInfo", res.data);
       })
       .catch(err => {
         console.log(err);
       });
   },
+  computed: mapState({
+    HNSlots(state) {
+      let val = [{ values: [] }];
+      if (!state.houseInfo) {
+        return val;
+      }
+      for (let i = 0; i < state.houseInfo.length; i++) {
+        val[0].values.push(state.houseInfo[i].name);
+      }
+      return val;
+    },
+    RNSlots(state) {
+      let val = [{ values: [] }];
+      if (!state.houseInfo) {
+        return val;
+      }
+      let houseFound = state.houseInfo.find(h => {
+        return h.name === this.houseName;
+      });
+      if (houseFound) {
+        this.houseSelected = houseFound;
+        for (let i = 0; i < houseFound.roomSize; i++) {
+          let num = i + 1;
+          if (num < 10) {
+            val[0].values.push("0" + num.toString());
+          } else {
+            val[0].values.push(num.toString());
+          }
+        }
+      }
+      return val;
+    },
+    LNSlots(state) {
+      let val = [{ values: [] }];
+      if (!state.houseInfo) {
+        return val;
+      }
+      let houseFound = state.houseInfo.find(h => {
+        return h.name === this.houseName;
+      });
+      if (houseFound) {
+        for (let i = 0; i < houseFound.layerSize; i++) {
+          let num = i + 1;
+          val[0].values.push(num.toString());
+        }
+      }
+      return val;
+    }
+  }),
   mounted: function() {
     let curDate = new Date();
     this.curYear = curDate.getFullYear();
@@ -92,7 +142,8 @@ export default {
   },
   data() {
     return {
-      houseName: "真如苑",
+      houseName: "",
+      houseSelected: null,
       HNPickerVis: false,
       layerNum: "1",
       roomNum: "01",
@@ -124,21 +175,6 @@ export default {
             "12"
           ]
         }
-      ],
-      HNSlots: [
-        {
-          values: ["真如苑", "荔枝苑", "明湖苑"]
-        }
-      ],
-      LNSlots: [
-        {
-          values: ["1", "2", "3"]
-        }
-      ],
-      RNSlots: [
-        {
-          values: ["01", "02", "03", "04", "05", "06"]
-        }
       ]
     };
   },
@@ -155,7 +191,7 @@ export default {
       //console.log(imgs[0]);
       this.$axios
         .post("/api/upload", {
-          houseName: this.houseName,
+          houseInfo: this.houseSelected,
           layerNum: this.layerNum,
           roomNum: this.roomNum,
           year: this.curYear,

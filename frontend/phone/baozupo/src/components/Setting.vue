@@ -50,6 +50,16 @@ export default {
       localStorage.removeItem("token_exp");
       this.$router.push("/login");
     },
+    updateInfo() {
+      this.$axios
+        .get("/api/get-user-info")
+        .then(res => {
+          this.$store.commit("updateInfo", res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     showAddHIVis() {
       this.addHIVis = true;
     },
@@ -81,6 +91,7 @@ export default {
               duration: 2500
             });
             this.addHIVis = false;
+            this.updateInfo();
           } else {
             this.$toast({
               message: res.msg,

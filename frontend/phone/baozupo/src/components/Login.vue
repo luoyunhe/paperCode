@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="login">
-    <section>
+    <section style="top:50%;">
       <mt-field
        label="用户名"
         placeholder="请输入用户名"
