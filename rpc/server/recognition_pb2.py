@@ -18,8 +18,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='recognition.proto',
   package='recognition',
   syntax='proto3',
-  serialized_options=_b('\n\033io.grpc.examples.helloworldB\017HelloWorldProtoP\001\242\002\003HLW'),
-  serialized_pb=_b('\n\x11recognition.proto\x12\x0brecognition\"g\n\x07Request\x12\x0f\n\x07imgPath\x18\x01 \x01(\t\x12*\n\x04type\x18\x02 \x01(\x0e\x32\x1c.recognition.Request.ImgType\"\x1f\n\x07ImgType\x12\t\n\x05WATER\x10\x00\x12\t\n\x05\x45LECT\x10\x01\"\x1a\n\x08Response\x12\x0e\n\x06\x64\x65gree\x18\x01 \x01(\x03\x32G\n\tRecognize\x12:\n\tRecognize\x12\x14.recognition.Request\x1a\x15.recognition.Response\"\x00\x42\x36\n\x1bio.grpc.examples.helloworldB\x0fHelloWorldProtoP\x01\xa2\x02\x03HLWb\x06proto3')
+  serialized_options=_b('\n\032io.grpc.726iot.recognitionB\020RecognitionProtoP\001\242\002\003HLW'),
+  serialized_pb=_b('\n\x11recognition.proto\x12\x0brecognition\"g\n\x07Request\x12\x0f\n\x07imgPath\x18\x01 \x01(\t\x12*\n\x04type\x18\x02 \x01(\x0e\x32\x1c.recognition.Request.ImgType\"\x1f\n\x07ImgType\x12\t\n\x05WATER\x10\x00\x12\t\n\x05\x45LECT\x10\x01\"\x1a\n\x08Response\x12\x0e\n\x06\x64\x65gree\x18\x01 \x01(\x02\x32G\n\tRecognize\x12:\n\tRecognize\x12\x14.recognition.Request\x1a\x15.recognition.Response\"\x00\x42\x36\n\x1aio.grpc.726iot.recognitionB\x10RecognitionProtoP\x01\xa2\x02\x03HLWb\x06proto3')
 )
 
 
@@ -95,8 +95,8 @@ _RESPONSE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='degree', full_name='recognition.Response.degree', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),

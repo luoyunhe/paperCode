@@ -15,6 +15,9 @@ def run():
         response = stub.Recognize(recognition_pb2.Request(
             imgPath='path/to/img', type=recognition_pb2.Request.ELECT))
         print(response)
+        response = stub.Recognize(recognition_pb2.Request(
+            imgPath='path/to/img', type=recognition_pb2.Request.WATER))
+        print(response)
 
 
 if __name__ == '__main__':

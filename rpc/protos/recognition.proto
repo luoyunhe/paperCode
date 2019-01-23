@@ -25,5 +25,5 @@ message Request {
 
 // The response message containing the greetings
 message Response {
-  int64 degree = 1;
+  float degree = 1;
 }
