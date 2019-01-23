@@ -1,8 +1,8 @@
 var config = {
-  database: 'koa_test',
-  username: 'lyh',
-  password: 'lyh',
-  host: '172.16.0.33',
+  database: 'hml',
+  username: 'root',
+  password: 'yh123',
+  host: '111.231.244.208',
   port: 3306,
   dialect: 'mysql'
 }
