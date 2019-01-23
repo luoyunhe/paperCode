@@ -3,9 +3,6 @@ import os
 import tensorflow as tf
 import cv2
 from PIL import Image
-import time
-
-# import gui_application.visualization_utils as vis_util
 
 
 NUM_CLASSES_RECT = 2
@@ -131,11 +128,9 @@ class Detector:
         return result
 
     def predict(self, image):
-        start = time.clock()
         image_rect, ratio = self.predict_rect(image)
         image_preprocessed = self.preprocess(image_rect)
         result = self.predict_multi_digit(image_preprocessed)
-        end = time.clock()
 
         result_number = 0
         for number in result:

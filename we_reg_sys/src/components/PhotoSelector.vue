@@ -77,7 +77,7 @@ export default {
       console.log("createImage");
       let vm = this;
       new Compressor(files[0], {
-        quality: 0.1,
+        quality: 0.6,
         success(result) {
           vm.blobToDataURL(result, res => {
             vm.base64Imgs.push(res);
