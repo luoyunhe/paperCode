@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="query">
     <div style="line-height: 60px; font-size: 25px;">查询水电使用信息</div>
-    <el-form :inline="true" label-width="80px" class="demo-form-inline" style="margin-top:30px;">
+    <el-form :inline="true" label-width="160px" class="demo-form-inline" style="margin-top:30px;">
           <el-form-item label="选择年份">
             <el-select v-model="curYear" placeholder="请选择年份">
               <el-option v-for="item in yearoptions" :key="item.value" :label="item.label" :value="item.value">
@@ -21,6 +21,12 @@
             </el-select>
           </el-form-item>
            <el-form-item>
+          </el-form-item>
+           <el-form-item label="水费单价（元/立方）">
+             <el-input v-model="waterPrice" placeholder="请输入水费单价"></el-input>
+          </el-form-item>
+           <el-form-item label="电费单价（元/度）">
+             <el-input v-model="electPrice" placeholder="请输入电费单价"></el-input>
           </el-form-item>
     </el-form>
     <el-button type="primary" size="large" @click="queryWEInfo" style="margin-top: 30px;width:57%;">查询</el-button>
@@ -91,6 +97,8 @@ export default {
   },
   data() {
     return {
+      waterPrice: 4.5,
+      electPrice: 1.5,
       yearoptions: [],
       monthoptions: [],
       flag: false,
@@ -275,12 +283,12 @@ export default {
           if (c.waterDegree == "" || c.LastwaterDegree == "") {
             c.waterFee = "";
           } else {
-            c.waterFee = (c.waterDegree + c.LastwaterDegree) * 4.5;
+            c.waterFee = (c.waterDegree - c.LastwaterDegree) * this.waterPrice;
           }
           if (c.electDegree == "" || c.LastelectDegree == "") {
             c.waterFee = "";
           } else {
-            c.electFee = (c.electDegree + c.LastelectDegree) * 1.5;
+            c.electFee = (c.electDegree - c.LastelectDegree) * this.electPrice;
           }
 
           kk.push(c);
@@ -297,6 +305,7 @@ export default {
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]));
     },
+    // updateTab() {},
     queryWEInfo() {
       this.onHNChange();
       if (!this.houseSelected) {
@@ -349,6 +358,7 @@ export default {
           break;
       }
       let self = this;
+      // let time = 0;
       this.$axios
         .post("/api/query-we-info", {
           year: this.curYear,
@@ -371,6 +381,10 @@ export default {
               this.tableData.push(tab);
             }
             console.log("haha", this.tableData);
+            //   time++;
+            //   if (time >= 2) {
+            //     this.updateTab();
+            //   }
           }
         })
         .catch(err => {
@@ -401,6 +415,10 @@ export default {
               tab.roomNum = this.WEInfo1[j].roomNum;
               this.tableData1.push(tab);
             }
+            // time++;
+            // if (time >= 2) {
+            //   this.updateTab();
+            // }
             console.log("hehe", this.tableData1);
             let len1 = this.tableData1.length;
             let flag_check = false;
@@ -427,8 +445,8 @@ export default {
                 a = new1[i];
                 b = this.tableData1[j];
                 if (a.layerNum == b.layerNum && a.roomNum == b.roomNum) {
-                  new1[i].LastwaterDegree = b.waterDegree + 1000;
-                  new1[i].LastelectDegree = b.electDegree + 1000;
+                  new1[i].LastwaterDegree = b.waterDegree;
+                  new1[i].LastelectDegree = b.electDegree;
                   flag_check = true;
                   break;
                 }
