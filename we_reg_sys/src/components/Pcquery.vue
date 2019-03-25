@@ -231,6 +231,7 @@ export default {
       require.ensure([], () => {
         const { export_json_to_excel } = require("../excel/Export2Excel");
         // const tHeader = ['层数', '房间号', '本月用水读数', '上月用水读数', '本月用电读数', '上月用电读数'];
+
         // const filterVal = ['layerNum', 'roomNum', 'waterDegree', 'LastwaterDegree', 'electDegree', 'LastelectDegree'];
         const tHeader = [
           "层数",

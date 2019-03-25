@@ -7,6 +7,13 @@ import App from './App'
 import router from './router'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
+// import Blob from './excel/Blob.js'
+// import Export2Excel from './excel/Export2Excel.js'
+
+Vue.use(ElementUI)
 Vue.use(MintUI)
 Vue.use(Vuex)
 const state = {
